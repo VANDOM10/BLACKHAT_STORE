@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Up Game - Mirip CodaShop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2.2em;
+            font-weight: 700;
+        }
+        .section {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            background-color: #fafafa;
+        }
+        .section h2 {
+            margin-top: 0;
+            color: #007bff;
+            font-size: 1.5em;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .game-selection, .amount-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+        .game-card, .amount-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+        }
+        .game-card:hover, .amount-card:hover {
+            border-color: #007bff;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
+            transform: translateY(-3px);
+        }
+        .game-card.selected, .amount-card.selected {
+            border-color: #007bff;
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.4);
+            background-color: #e7f3ff;
+        }
+        .game-card img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+        .game-card p, .amount-card p {
+            margin: 0;
+            font-weight: 600;
+            color: #555;
+        }
+        .amount-card span {
+            font-size: 0.9em;
+            color: #777;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        .input-group input[type="text"],
+        .input-group input[type="email"] {
+            width: calc(100% - 24px);
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+        .input-group input[type="text"]:focus,
+        .input-group input[type="email"]:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        }
+        .summary {
+            background-color: #e9f7ef;
+            border: 1px solid #28a745;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-weight: 600;
+        }
+        .summary p {
+            margin: 5px 0;
+        }
+        .summary strong {
+            color: #000;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            .section h2 {
+                font-size: 1.3em;
+            }
+            .game-selection, .amount-selection {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Top Up Game Instan</h1>
+
+        <div class="section">
+            <h2>1. Pilih Game</h2>
+            <div class="game-selection" id="gameSelection">
+                <div class="game-card" data-game-id="mlbb" data-game-name="Mobile Legends: Bang Bang">
+                    <img src="https://cdn.codashop.com/images/products/mobile-legends-bang-bang-icon.png" alt="Mobile Legends">
+                    <p>Mobile Legends</p>
+                </div>
+                <div class="game-card" data-game-id="freefire" data-game-name="Free Fire">
+                    <img src="https://cdn.codashop.com/images/products/free-fire-icon.png" alt="Free Fire">
+                    <p>Free Fire</p>
+                </div>
+                <div class="game-card" data-game-id="genshin" data-game-name="Genshin Impact">
+                    <img src="https://cdn.codashop.com/images/products/genshin-impact-icon.png" alt="Genshin Impact">
+                    <p>Genshin Impact</p>
+                </div>
+                <div class="game-card" data-game-id="valorant" data-game-name="Valorant">
+                    <img src="https://cdn.codashop.com/images/products/valorant-icon.png" alt="Valorant">
+                    <p>Valorant</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>2. Masukkan ID Pengguna</h2>
+            <div class="input-group">
+                <label for="userID">ID Pengguna</label>
+                <input type="text" id="userID" placeholder="Masukkan ID Pengguna Anda">
+            </div>
+            <div class="input-group" id="serverIDGroup" style="display: none;">
+                <label for="serverID">Server ID (Opsional)</label>
+                <input type="text" id="serverID" placeholder="Masukkan Server ID (contoh: 1234)">
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>3. Pilih Nominal Top Up</h2>
+            <div class="amount-selection" id="amountSelection">
+                <!-- Amounts will be loaded here by JavaScript -->
+                <p>Pilih game terlebih dahulu.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>4. Pilih Pembayaran (Contoh)</h2>
+            <div class="input-group">
+                <label for="paymentMethod">Metode Pembayaran</label>
+                <select id="paymentMethod" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 1em; box-sizing: border-box;">
+                    <option value="">Pilih Metode Pembayaran</option>
+                    <option value="ovo">OVO</option>
+                    <option value="gopay">GoPay</option>
+                    <option value="dana">DANA</option>
+                    <option value="bank_transfer">Transfer Bank</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="email">Email (Opsional)</label>
+                <input type="email" id="email" placeholder="Masukkan email Anda untuk bukti pembayaran">
+            </div>
+        </div>
+
+        <div class="summary" id="orderSummary" style="display: none;">
+            <h2>Ringkasan Pesanan</h2>
+            <p>Game: <strong id="summaryGame"></strong></p>
+            <p>ID Pengguna: <strong id="summaryUserID"></strong></p>
+            <p id="summaryServerIDRow" style="display: none;">Server ID: <strong id="summaryServerID"></strong></p>
+            <p>Nominal: <strong id="summaryAmount"></strong></p>
+            <p>Harga: <strong id="summaryPrice"></strong></p>
+            <p>Metode Pembayaran: <strong id="summaryPayment"></strong></p>
+        </div>
+
+        <button id="buyNowButton" disabled>Beli Sekarang</button>
+    </div>
+
+    <script>
+        const gamesData = {
+            mlbb: {
+                name: "Mobile Legends: Bang Bang",
+                requiresServerId: true,
+                amounts: [
+                    { id: 'mlbb-1', diamonds: 86, price: 25000 },
+                    { id: 'mlbb-2', diamonds: 172, price: 50000 },
+                    { id: 'mlbb-3', diamonds: 257, price: 75000 },
+                    { id: 'mlbb-4', diamonds: 344, price: 100000 },
+                ]
+            },
+            freefire: {
+                name: "Free Fire",
+                requiresServerId: false,
+                amounts: [
+                    { id: 'ff-1', diamonds: 70, price: 10000 },
+                    { id: 'ff-2', diamonds: 140, price: 20000 },
+                    { id: 'ff-3', diamonds: 210, price: 30000 },
+                    { id: 'ff-4', diamonds: 355, price: 50000 },
+                ]
+            },
+            genshin: {
+                name: "Genshin Impact",
+                requiresServerId: false,
+                amounts: [
+                    { id: 'genshin-1', genesis: 60, price: 15000 },
+                    { id: 'genshin-2', genesis: 300, price: 75000 },
+                    { id: 'genshin-3', genesis: 980, price: 225000 },
+                ]
+            },
+            valorant: {
+                name: "Valorant",
+                requiresServerId: false,
+                amounts: [
+                    { id: 'valo-1', vp: 125, price: 15000 },
+                    { id: 'valo-2', vp: 420, price: 50000 },
+                    { id: 'valo-3', vp: 700, price: 85000 },
+                ]
+            }
+        };
+
+        let selectedGame = null;
+        let selectedAmount = null;
+
+        const gameSelectionDiv = document.getElementById('gameSelection');
+        const userIDInput = document.getElementById('userID');
+        const serverIDInput = document.getElementById('serverID');
+        const serverIDGroup = document.getElementById('serverIDGroup');
+        const amountSelectionDiv = document.getElementById('amountSelection');
+        const paymentMethodSelect = document.getElementById('paymentMethod');
+        const emailInput = document.getElementById('email');
+        const orderSummaryDiv = document.getElementById('orderSummary');
+        const summaryGame = document.getElementById('summaryGame');
+        const summaryUserID = document.getElementById('summaryUserID');
+        const summaryServerID = document.getElementById('summaryServerID');
+        const summaryServerIDRow = document.getElementById('summaryServerIDRow');
+        const summaryAmount = document.getElementById('summaryAmount');
+        const summaryPrice = document.getElementById('summaryPrice');
+        const summaryPayment = document.getElementById('summaryPayment');
+        const buyNowButton = document.getElementById('buyNowButton');
+
+        function formatRupiah(number) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(number);
+        }
+
+        function updateBuyButtonState() {
+            const isGameSelected = selectedGame !== null;
+            const isUserIDFilled = userIDInput.value.trim() !== '';
+            const isAmountSelected = selectedAmount !== null;
+            const isPaymentMethodSelected = paymentMethodSelect.value !== '';
+            const isServerIDNeededAndFilled = selectedGame && gamesData[selectedGame.id].requiresServerId ? serverIDInput.value.trim() !== '' : true;
+
+            buyNowButton.disabled = !(isGameSelected && isUserIDFilled && isAmountSelected && isPaymentMethodSelected && isServerIDNeededAndFilled);
+        }
+
+        function updateSummary() {
+            if (selectedGame && selectedAmount) {
+                summaryGame.textContent = selectedGame.name;
+                summaryUserID.textContent = userIDInput.value.trim();
+
+                if (gamesData[selectedGame.id].requiresServerId && serverIDInput.value.trim()) {
+                    summaryServerID.textContent = serverIDInput.value.trim();
+                    summaryServerIDRow.style.display = 'block';
+                } else {
+                    summaryServerIDRow.style.display = 'none';
+                }
+
+                let amountText = '';
+                if (selectedAmount.diamonds) amountText = `${selectedAmount.diamonds} Diamonds`;
+                else if (selectedAmount.genesis) amountText = `${selectedAmount.genesis} Genesis Crystals`;
+                else if (selectedAmount.vp) amountText = `${selectedAmount.vp} VP`;
+                else amountText = 'Jumlah tidak diketahui';
+
+                summaryAmount.textContent = amountText;
+                summaryPrice.textContent = formatRupiah(selectedAmount.price);
+                summaryPayment.textContent = paymentMethodSelect.options[paymentMethodSelect.selectedIndex].text;
+                orderSummaryDiv.style.display = 'block';
+            } else {
+                orderSummaryDiv.style.display = 'none';
+            }
+            updateBuyButtonState();
+        }
+
+        gameSelectionDiv.addEventListener('click', (event) => {
+            const card = event.target.closest('.game-card');
+            if (card) {
+                document.querySelectorAll('.game-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                selectedGame = {
+                    id: card.dataset.gameId,
+                    name: card.dataset.gameName
+                };
+                selectedAmount = null; // Reset amount selection when game changes
+                loadAmountsForGame(selectedGame.id);
+                updateSummary();
+
+                if (gamesData[selectedGame.id].requiresServerId) {
+                    serverIDGroup.style.display = 'block';
+                } else {
+                    serverIDGroup.style.display = 'none';
+                    serverIDInput.value = ''; // Clear server ID if not needed
+                }
+            }
+        });
+
+        function loadAmountsForGame(gameId) {
+            amountSelectionDiv.innerHTML = ''; // Clear previous amounts
+            const game = gamesData[gameId];
+            if (!game) {
+                amountSelectionDiv.innerHTML = '<p>Pilih game terlebih dahulu.</p>';
+                return;
+            }
+
+            game.amounts.forEach(amount => {
+                const amountCard = document.createElement('div');
+                amountCard.classList.add('amount-card');
+                amountCard.dataset.amountId = amount.id;
+                amountCard.dataset.price = amount.price;
+
+                let amountText = '';
+                if (amount.diamonds) amountText = `${amount.diamonds} Diamonds`;
+                else if (amount.genesis) amountText = `${amount.genesis} Genesis Crystals`;
+                else if (amount.vp) amountText = `${amount.vp} VP`;
+
+                amountCard.innerHTML = `
+                    <p></p>
+                    <span>${formatRupiah(amount.price)}</span>
+                `;
+                amountSelectionDiv.appendChild(amountCard);
+            });
+        }
+
+        amountSelectionDiv.addEventListener('click', (event) => {
+            const card = event.target.closest('.amount-card');
+            if (card && selectedGame) {
+                document.querySelectorAll('.amount-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                selectedAmount = gamesData[selectedGame.id].amounts.find(a => a.id === card.dataset.amountId);
+                updateSummary();
+            }
+        });
+
+        userIDInput.addEventListener('input', updateSummary);
+        serverIDInput.addEventListener('input', updateSummary);
+        paymentMethodSelect.addEventListener('change', updateSummary);
+        emailInput.addEventListener('input', updateSummary); // Not used in summary, but good for form state
+
+        buyNowButton.addEventListener('click', () => {
+            if (buyNowButton.disabled) return;
+
+            const orderDetails = {
+                gameId: selectedGame.id,
+                gameName: selectedGame.name,
+                userID: userIDInput.value.trim(),
+                serverID: gamesData[selectedGame.id].requiresServerId ? serverIDInput.value.trim() : null,
+                amountId: selectedAmount.id,
+                amountValue: selectedAmount.diamonds || selectedAmount.genesis || selectedAmount.vp,
+                amountType: selectedAmount.diamonds ? 'Diamonds' : (selectedAmount.genesis ? 'Genesis Crystals' : (selectedAmount.vp ? 'VP' : 'Unknown')),
+                price: selectedAmount.price,
+                paymentMethod: paymentMethodSelect.value,
+                paymentMethodName: paymentMethodSelect.options[paymentMethodSelect.selectedIndex].text,
+                email: emailInput.value.trim()
+            };
+
+            console.log("Order Details:", orderDetails);
+            alert(`Pesanan Anda untuk ${orderDetails.gameName} sebesar ${orderDetails.amountValue} ${orderDetails.amountType} dengan harga ${formatRupiah(orderDetails.price)} akan diproses menggunakan ${orderDetails.paymentMethodName}. (Ini hanya simulasi frontend)`);
+
+            // Di sini Anda akan mengirim data orderDetails ke backend Anda
+            // Contoh: fetch('/api/create-order', { method: 'POST', body: JSON.stringify(orderDetails) })
+            // .then(response => response.json())
+            // .then(data => {
+            //     if (data.success) {
+            //         window.location.href = data.paymentUrl; // Redirect ke halaman pembayaran
+            //     } else {
+            //         alert('Gagal membuat pesanan: ' + data.message);
+            //     }
+            // })
+            // .catch(error => console.error('Error:', error));
+        });
+
+        // Initial state update
+        updateBuyButtonState();
+    </script>
+</body>
+</html>
